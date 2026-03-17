@@ -1,6 +1,6 @@
 # Unity CLI Toolkit for AI-Assisted Unity Workflows
 
-Reusable setup guides, custom tool templates, and validation scripts for teams using Unity with `unity-cli`, Codex, Claude, or MCP-style agent workflows.
+Build repeatable Unity automation with `unity-cli`: setup guides, custom tool templates, and validation workflows for Codex, Claude, and MCP-style agent workflows.
 
 ## Quick Start
 
