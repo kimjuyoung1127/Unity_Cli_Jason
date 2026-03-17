@@ -1,8 +1,8 @@
 <div align="center">
 
-<img src="assets/images/hero.png" alt="Unity CLI Toolkit" width="600" />
+# 🎮 Unity CLI Toolkit
 
-# Unity CLI Toolkit for AI-Assisted Unity Workflows
+### for AI-Assisted Unity Workflows
 
 **Repeatable Unity automation for Codex, Claude, and AI-assisted workflows**
 
@@ -14,16 +14,6 @@
 
 [**Quick Start**](#-quick-start) · [**Setup Guide**](docs/getting-started.md) · [**Examples**](#-examples) · [**Contributing**](#-contributing)
 
-</div>
-
----
-
-## 🖥️ Terminal Demo
-
-<div align="center">
-<img src="assets/images/terminal-demo.png" alt="Terminal Demo" width="700" />
-
-<!-- TODO: Replace with animated GIF for live demo effect -->
 </div>
 
 ---
@@ -66,9 +56,11 @@ flowchart LR
 ```
 
 <details>
-<summary>Can't see the diagram? Click for a static version.</summary>
+<summary>Can't see the diagram? View the text version.</summary>
 
-<img src="assets/images/flow-diagram.png" alt="How It Works" width="600" />
+```
+AI Agent (Codex/Claude) → PowerShell Helpers → Unity Editor → [UnityCliTool] → JSON Result → Agent
+```
 
 </details>
 
@@ -211,6 +203,6 @@ Issues and PRs are welcome, especially for:
 
 **Built for AI-assisted Unity workflows**
 
-[⬆ Back to top](#unity-cli-toolkit-for-ai-assisted-unity-workflows)
+[⬆ Back to top](#-unity-cli-toolkit)
 
 </div>
