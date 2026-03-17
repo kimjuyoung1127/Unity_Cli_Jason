@@ -25,7 +25,7 @@ unity-cli resource_validate_tool
 
 ```powershell
 unity-cli robot_catalog_tool
-unity-cli fk_compute_tool --params '{"template":"FR5","joints":"0,-45,0,-59,-92,-42"}'
+unity-cli fk_compute_tool --params '{"template":"ExampleBot","joints":"0,45"}'
 ```
 
 ## 4. Tests

@@ -20,5 +20,5 @@ unity-cli status
 
 ```powershell
 $PSNativeCommandArgumentPassing = "Standard"
-unity-cli fk_compute_tool --params '{"template":"FR5","joints":"0,-45,0,-59,-92,-42"}'
+unity-cli fk_compute_tool --params '{"template":"ExampleBot","joints":"0,45"}'
 ```
