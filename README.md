@@ -6,9 +6,9 @@ Build repeatable Unity automation with `unity-cli`: setup guides, custom tool te
 
 ```powershell
 $PSNativeCommandArgumentPassing = "Standard"
-unity-cli status
-unity-cli list
-unity-cli compile_check_tool
+unity-cli --project C:/Path/To/YourProject status
+unity-cli --project C:/Path/To/YourProject list
+unity-cli --project C:/Path/To/YourProject compile_check_tool
 ```
 
 ## Who this is for
@@ -23,6 +23,8 @@ unity-cli compile_check_tool
 - Starter templates for writing custom `[UnityCliTool]` commands
 - A repeatable validation workflow for compile, console, scene, prefab, resource, and test checks
 - Copyable PowerShell examples that work with Unity + `unity-cli`
+- Multi-instance guidance for choosing the correct Unity Editor with `--project`
+- Safer validation patterns for domain reloads, compile waits, and wrapper tools
 
 ## Repo Map
 
@@ -35,19 +37,18 @@ unity-cli compile_check_tool
 
 ```powershell
 $PSNativeCommandArgumentPassing = "Standard"
-unity-cli fk_compute_tool --params '{"template":"ExampleBot","joints":"0,45"}'
+unity-cli --project C:/Path/To/YourProject fk_compute_tool --params '{"template":"ExampleBot","joints":"0,45"}'
 ```
 
 ## Example Validation Flow
 
 ```powershell
 $PSNativeCommandArgumentPassing = "Standard"
-unity-cli compile_check_tool
-unity-cli console_check_tool --params '{"type":"error"}'
-unity-cli scene_validate_tool --params '{"name":"all"}'
-unity-cli resource_validate_tool
-unity-cli run_tests_tool --params '{"mode":"edit"}'
-unity-cli run_tests_tool --params '{"results":true,"verbose":true}'
+./scripts/wait-unity-ready.ps1 -ProjectPath C:/Path/To/YourProject
+unity-cli --project C:/Path/To/YourProject compile_check_tool
+unity-cli --project C:/Path/To/YourProject console_check_tool --params '{"type":"error"}'
+unity-cli --project C:/Path/To/YourProject scene_validate_tool --params '{"name":"all"}'
+unity-cli --project C:/Path/To/YourProject resource_validate_tool
 ```
 
 ## Codex / Windows Note
@@ -55,11 +56,14 @@ unity-cli run_tests_tool --params '{"results":true,"verbose":true}'
 - Use registered tool names such as `compile_check_tool`, not guessed kebab-case aliases.
 - In PowerShell, prefer `--params '{"key":"value"}'` when passing strings, booleans, or comma-separated values.
 - Set `$PSNativeCommandArgumentPassing = "Standard"` before invoking complex commands.
+- If more than one Unity project is open, prefer `unity-cli --project C:/Path/To/YourProject ...`.
+- After menu execution, recompiles, or build-target switches, wait for `status` to return `ready` before chaining the next command.
 
 ## Known Reality
 
 - EditMode automation is usually the most reliable baseline.
 - PlayMode automation can be environment-sensitive and may require batch or isolated project workflows.
+- Custom wrapper tools such as `run_edit_mode_tests_tool` are often more reliable than JSON-heavy test commands in PowerShell scripts.
 
 ## Roadmap
 

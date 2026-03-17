@@ -13,12 +13,23 @@ If Unity MCP works but `unity-cli` does not, the issue is usually command resolu
 ```powershell
 Get-Command unity-cli
 unity-cli --version
-unity-cli status
+unity-cli --project C:/Path/To/YourProject status
 ```
 
 ## PowerShell argument passing
 
 ```powershell
 $PSNativeCommandArgumentPassing = "Standard"
-unity-cli fk_compute_tool --params '{"template":"ExampleBot","joints":"0,45"}'
+unity-cli --project C:/Path/To/YourProject fk_compute_tool --params '{"template":"ExampleBot","joints":"0,45"}'
 ```
+
+## Multiple Unity instances
+
+If more than one Unity Editor is open, avoid plain `unity-cli status`.
+
+```powershell
+unity-cli --project C:/Path/To/YourProject status
+unity-cli --project C:/Path/To/YourProject list
+```
+
+This removes ambiguity when another project already owns the default port.
