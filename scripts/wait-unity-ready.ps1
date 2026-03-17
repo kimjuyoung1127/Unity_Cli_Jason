@@ -1,29 +1,17 @@
 [CmdletBinding()]
 param(
     [string]$ProjectPath,
-    [int]$TimeoutSeconds = 60
+    [int]$TimeoutSeconds = 60,
+    [int]$PollIntervalSeconds = 2
 )
 
 $ErrorActionPreference = "Stop"
 $PSNativeCommandArgumentPassing = "Standard"
+$PSNativeCommandUseErrorActionPreference = $false
 
-function Get-UnityCliArgs {
-    if ([string]::IsNullOrWhiteSpace($ProjectPath)) {
-        return @()
-    }
+. (Join-Path $PSScriptRoot "invoke-unity-cli-safe.ps1")
 
-    return @("--project", $ProjectPath)
-}
-
-$deadline = (Get-Date).AddSeconds($TimeoutSeconds)
-do {
-    $statusText = (& unity-cli @(Get-UnityCliArgs) status 2>&1 | Out-String).Trim()
-    $statusText
-    if ($statusText -match "ready") {
-        exit 0
-    }
-
-    Start-Sleep -Seconds 2
-} while ((Get-Date) -lt $deadline)
-
-throw "Unity did not reach ready state within $TimeoutSeconds seconds."
+$null = Wait-UnityCliReady `
+    -ResolvedProjectPath $ProjectPath `
+    -TimeoutSeconds $TimeoutSeconds `
+    -PollIntervalSeconds $PollIntervalSeconds

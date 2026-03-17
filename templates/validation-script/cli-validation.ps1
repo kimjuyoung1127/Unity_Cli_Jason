@@ -6,53 +6,40 @@ param(
 
 $ErrorActionPreference = "Stop"
 $PSNativeCommandArgumentPassing = "Standard"
+$PSNativeCommandUseErrorActionPreference = $false
 
 Get-Command unity-cli | Out-Null
 Write-Host "[OK] unity-cli found"
 
-function Get-UnityCliArgs {
-    if ([string]::IsNullOrWhiteSpace($ProjectPath)) {
-        return @()
-    }
-
-    return @("--project", $ProjectPath)
-}
-
-function Invoke-UnityCli {
-    param(
-        [Parameter(Mandatory = $true)][string[]]$Args
-    )
-
-    return (& unity-cli @Args 2>&1 | Out-String).Trim()
-}
-
-function Wait-UnityReady {
-    $deadline = (Get-Date).AddSeconds($ReadyTimeoutSeconds)
-    do {
-        $statusText = Invoke-UnityCli -Args (@(Get-UnityCliArgs) + @("status"))
-        $statusText
-        if ($statusText -match "ready") {
-            return
-        }
-
-        Start-Sleep -Seconds 2
-    } while ((Get-Date) -lt $deadline)
-
-    throw "Unity did not reach ready state within $ReadyTimeoutSeconds seconds."
-}
+. (Join-Path $PSScriptRoot "..\..\scripts\invoke-unity-cli-safe.ps1")
 
 function Test-ToolPresent {
-    param([Parameter(Mandatory = $true)][string]$ToolName)
+    param(
+        [Parameter(Mandatory = $true)][string]$ToolName,
+        [Parameter(Mandatory = $true)][string]$ListText
+    )
 
-    $listText = Invoke-UnityCli -Args (@(Get-UnityCliArgs) + @("list"))
-    return $listText -match ('"name": "' + [regex]::Escape($ToolName) + '"')
+    return $ListText -match ('"name": "' + [regex]::Escape($ToolName) + '"')
 }
 
-Wait-UnityReady
-Invoke-UnityCli -Args (@(Get-UnityCliArgs) + @("list"))
-Invoke-UnityCli -Args (@(Get-UnityCliArgs) + @("compile_check_tool"))
-Invoke-UnityCli -Args (@(Get-UnityCliArgs) + @("console_check_tool", "--params", '{"type":"error"}'))
+$null = Wait-UnityCliReady -ResolvedProjectPath $ProjectPath -TimeoutSeconds $ReadyTimeoutSeconds
+$listResult = Invoke-UnityCliSafe -ResolvedProjectPath $ProjectPath -Args @("list")
+$listText = $listResult.Output
+if ($listText) {
+    $listText
+}
+$compileResult = Invoke-UnityCliSafe -ResolvedProjectPath $ProjectPath -Args @("compile_check_tool")
+if ($compileResult.Output) {
+    $compileResult.Output
+}
+$consoleResult = Invoke-UnityCliSafe -ResolvedProjectPath $ProjectPath -Args @("console_check_tool", "--params", '{"type":"error"}')
+if ($consoleResult.Output) {
+    $consoleResult.Output
+}
 
-if (Test-ToolPresent -ToolName "run_edit_mode_tests_tool") {
-    Invoke-UnityCli -Args (@(Get-UnityCliArgs) + @("run_edit_mode_tests_tool"))
+if (Test-ToolPresent -ToolName "run_edit_mode_tests_tool" -ListText $listText) {
+    $testResult = Invoke-UnityCliSafe -ResolvedProjectPath $ProjectPath -Args @("run_edit_mode_tests_tool")
+    if ($testResult.Output) {
+        $testResult.Output
+    }
 }

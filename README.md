@@ -20,6 +20,7 @@ unity-cli --project C:/Path/To/YourProject compile_check_tool
 ## What this repo gives you
 
 - A proven Windows/Codex setup flow for `unity-cli`
+- Reusable PowerShell helpers for safe `unity-cli` invocation and Unity batch methods
 - Starter templates for writing custom `[UnityCliTool]` commands
 - A repeatable validation workflow for compile, console, scene, prefab, resource, and test checks
 - Copyable PowerShell examples that work with Unity + `unity-cli`
@@ -45,11 +46,20 @@ unity-cli --project C:/Path/To/YourProject fk_compute_tool --params '{"template"
 ```powershell
 $PSNativeCommandArgumentPassing = "Standard"
 ./scripts/wait-unity-ready.ps1 -ProjectPath C:/Path/To/YourProject
-unity-cli --project C:/Path/To/YourProject compile_check_tool
-unity-cli --project C:/Path/To/YourProject console_check_tool --params '{"type":"error"}'
-unity-cli --project C:/Path/To/YourProject scene_validate_tool --params '{"name":"all"}'
-unity-cli --project C:/Path/To/YourProject resource_validate_tool
+./scripts/invoke-unity-cli-safe.ps1 -ProjectPath C:/Path/To/YourProject compile_check_tool
+./scripts/invoke-unity-cli-safe.ps1 -ProjectPath C:/Path/To/YourProject console_check_tool --params '{"type":"error"}'
+./scripts/invoke-unity-cli-safe.ps1 -ProjectPath C:/Path/To/YourProject scene_validate_tool --params '{"name":"all"}'
+./scripts/invoke-unity-cli-safe.ps1 -ProjectPath C:/Path/To/YourProject resource_validate_tool
 ```
+
+## Generic Script Helpers
+
+- `scripts/invoke-unity-cli-safe.ps1`
+  - Wraps `unity-cli` calls with stable PowerShell defaults, retry support, and project-aware status handling.
+- `scripts/wait-unity-ready.ps1`
+  - Waits for the correct Unity project to reach `ready`, but fails fast on `no instance` and `project locked`.
+- `scripts/invoke-unity-batch-method.ps1`
+  - Runs any Unity `-executeMethod` in batchmode, checks for project-lock conflicts, and can retry once after compile-only passes when you provide a success pattern.
 
 ## Codex / Windows Note
 
@@ -58,6 +68,8 @@ unity-cli --project C:/Path/To/YourProject resource_validate_tool
 - Set `$PSNativeCommandArgumentPassing = "Standard"` before invoking complex commands.
 - If more than one Unity project is open, prefer `unity-cli --project C:/Path/To/YourProject ...`.
 - After menu execution, recompiles, or build-target switches, wait for `status` to return `ready` before chaining the next command.
+- Prefer `scripts/invoke-unity-cli-safe.ps1` inside PowerShell automation when you want retries and clearer failure messages.
+- Prefer `scripts/invoke-unity-batch-method.ps1` for batch `-executeMethod` runs instead of hand-writing raw Unity command lines every time.
 
 ## Known Reality
 

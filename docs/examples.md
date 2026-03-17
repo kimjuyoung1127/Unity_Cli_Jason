@@ -4,13 +4,22 @@
 
 ```powershell
 $PSNativeCommandArgumentPassing = "Standard"
-unity-cli compile_check_tool
-unity-cli console_check_tool --params '{"type":"error"}'
+./scripts/invoke-unity-cli-safe.ps1 compile_check_tool
+./scripts/invoke-unity-cli-safe.ps1 console_check_tool --params '{"type":"error"}'
 ```
 
 ## Scene validation
 
 ```powershell
-unity-cli scene_validate_tool --params '{"name":"all"}'
-unity-cli scene_hierarchy_tool --params '{"depth":2}'
+./scripts/invoke-unity-cli-safe.ps1 scene_validate_tool --params '{"name":"all"}'
+./scripts/invoke-unity-cli-safe.ps1 scene_hierarchy_tool --params '{"depth":2}'
+```
+
+## Generic batch `executeMethod`
+
+```powershell
+./scripts/invoke-unity-batch-method.ps1 `
+  -ProjectPath C:/Path/To/YourProject `
+  -ExecuteMethod ExampleProject.Editor.BuildRunner.Build `
+  -SuccessPattern 'Build Finished, Result: Success\.'
 ```

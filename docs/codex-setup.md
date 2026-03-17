@@ -14,6 +14,7 @@ If Unity MCP works but `unity-cli` does not, the issue is usually command resolu
 Get-Command unity-cli
 unity-cli --version
 unity-cli --project C:/Path/To/YourProject status
+./scripts/invoke-unity-cli-safe.ps1 -ProjectPath C:/Path/To/YourProject compile_check_tool
 ```
 
 ## PowerShell argument passing
@@ -33,3 +34,12 @@ unity-cli --project C:/Path/To/YourProject list
 ```
 
 This removes ambiguity when another project already owns the default port.
+
+## Recommended script-first pattern
+
+For Codex or any PowerShell-heavy automation, prefer the helper scripts in this repo:
+
+```powershell
+./scripts/wait-unity-ready.ps1 -ProjectPath C:/Path/To/YourProject
+./scripts/invoke-unity-cli-safe.ps1 -ProjectPath C:/Path/To/YourProject compile_check_tool
+```

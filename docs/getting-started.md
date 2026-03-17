@@ -30,5 +30,20 @@ unity-cli list
 
 ```powershell
 $PSNativeCommandArgumentPassing = "Standard"
-unity-cli compile_check_tool
+./scripts/invoke-unity-cli-safe.ps1 compile_check_tool
+```
+
+## 6. Wait explicitly when Unity is busy
+
+```powershell
+./scripts/wait-unity-ready.ps1 -ProjectPath C:/Path/To/YourProject
+```
+
+## 7. Use the batch helper for `-executeMethod`
+
+```powershell
+./scripts/invoke-unity-batch-method.ps1 `
+  -ProjectPath C:/Path/To/YourProject `
+  -ExecuteMethod ExampleProject.Editor.BuildRunner.Build `
+  -SuccessPattern 'Build Finished, Result: Success\.'
 ```
