@@ -28,6 +28,24 @@ namespace ExampleProject.Editor.CliTools
 - Use real registered `snake_case` command names
 - Prefer `SuccessResponse` / `ErrorResponse`
 - Prefer `--params '{"key":"value"}'` for CLI usage
+- Keep tool messages and logs in English
+- Keep tool names and parameters generic enough to reuse across projects
+
+## Universal tool design rules
+
+- Prefer parameters such as `scene`, `required_objects`, `forbidden_objects`, `unique_names`, and `include_inactive`.
+- Avoid project-specific scene names, object names, or feature labels in the tool name itself.
+- Return machine-friendly payloads so validation scripts can parse results without string-matching logs.
+- Treat wrapper tools as stable entry points for shell automation, especially when the underlying workflow is sensitive to compile, reload, or PlayMode timing.
+
+## Recommended generic tool candidates
+
+- `scene_contract_validate_tool`
+  - Validate that a scene contains required objects, excludes forbidden ones, and keeps selected names unique.
+- `duplicate_object_audit_tool`
+  - Report duplicate object names, optionally filtered by prefixes, and optionally fail when duplicates exist.
+- `open_scene_tool`
+  - Open a target scene by path or build-settings name, with optional PlayMode entry for smoke validation.
 
 ## Wrapper tools for shell stability
 

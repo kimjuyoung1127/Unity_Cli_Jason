@@ -71,6 +71,14 @@ This usually means Unity is compiling, reloading, or switching targets.
 - Prefer `./scripts/wait-unity-ready.ps1` before chaining the next command.
 - If it persists for several minutes, check whether Unity is blocked on a modal dialog or another long-running task.
 
+## `unity-cli exec` fails with `The filename or extension is too long`
+
+This can happen on Windows when the generated temporary compile command becomes too large.
+
+- Prefer a custom wrapper tool instead of `unity-cli exec` for repeated workflows.
+- Prefer `./scripts/invoke-unity-batch-method.ps1` when the action maps cleanly to a static editor method.
+- Keep `exec` for short inspection snippets, not for scene rebuild or cleanup flows.
+
 ## `another Unity instance is running with this project open`
 
 This is common when a batch build is launched while the same project is already open in the editor.

@@ -27,6 +27,13 @@ unity-cli --project C:/Path/To/YourProject compile_check_tool
 - Multi-instance guidance for choosing the correct Unity Editor with `--project`
 - Safer validation patterns for domain reloads, compile waits, and wrapper tools
 
+## Design Rules
+
+- Tool logs and response messages should be written in English.
+- Tool names and parameter shapes should be project-agnostic and reusable across Unity projects.
+- Prefer generic inputs such as `scene`, `required_objects`, and `forbidden_objects` over project-specific names.
+- Keep project-specific behavior behind scene paths, method names, or arrays passed through `--params`.
+
 ## Repo Map
 
 - `docs/` - setup, troubleshooting, workflow documentation
